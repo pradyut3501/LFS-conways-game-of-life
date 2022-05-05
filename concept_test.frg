@@ -83,45 +83,52 @@ pred GameRules {
     }
 }
 
-// expect {
+expect {
 
-//     vacuity: {
-//         GameRules
-//     } is sat
+    vacuity: {
+        GameRules
+    } is sat
 
-//     vacuity2: {
-//         always{GameRules} => {}
-//     } is theorem
+    vacuity2: {
+        always{GameRules} => {}
+    } is theorem
 
-//     oneLoneCellDies: {
-//         (all x,y : Int | {
-//             x = 0 and y = 0 => {some Board.mappings[x][y]}
-//             else {no Board.mappings[x][y]}
-//         } and always{GameRules}) => {
-//             next_state{
-//                 all x,y: Int | no Board.mappings[x][y]
-//             }
-//         }
-//     } for 2 Int is theorem
+    oneLoneCellDies: {
+        (all x,y : Int | {
+            x = 0 and y = 0 => {some Board.mappings[x][y]}
+            else {no Board.mappings[x][y]}
+        } and always{GameRules}) => {
+            next_state{
+                all x,y: Int | no Board.mappings[x][y]
+            }
+        }
+    } for 2 Int is theorem
 
-//     /*cubeIsStable: {
-//         all x,y : Int | {
-//                 (x = 0 or x = 1) and (y = 0 or y = 1) => some Board.mappings[x][y]
-//                 else no Board.mappings[x][y]
-//         } and always{GameRules} => {
-//             always {
-//                 all x,y : Int | {
-//                     (x = 0 or x = 1) and (y = 0 or y = 1) => some Board.mappings[x][y]
-//                     else no Board.mappings[x][y]
-//                 }
-//             }
-//         }
-//     } is theorem */
-// }
+    /*cubeIsStable: {
+        all x,y : Int | {
+                (x = 0 or x = 1) and (y = 0 or y = 1) => some Board.mappings[x][y]
+                else no Board.mappings[x][y]
+        } and always{GameRules} => {
+            always {
+                all x,y : Int | {
+                    (x = 0 or x = 1) and (y = 0 or y = 1) => some Board.mappings[x][y]
+                    else no Board.mappings[x][y]
+                }
+            }
+        }
+    } is theorem */
+}
 
 pred Blinker { // Initial state to generate a Blinker oscillator
     all x,y : Int | {
         {(x = 0 and y = 0) or (x = -1 and y = 0) or (x = 1 and y = 0)} => some Board.mappings[x][y]
+        else no Board.mappings[x][y]
+    }
+}
+
+pred Beacon {
+    all x,y : Int | {
+        {(x = -2 and y = 1) or (x = -2 and y = 0) or (x = -1 and y = 1) or (x = 0 and y =-2) or (x = 1 and y =-2) or (x = 1 and y =-1)} => some Board.mappings[x][y]
         else no Board.mappings[x][y]
     }
 }
@@ -139,14 +146,21 @@ pred lassoSizeTwo {
     }
 }
 
+pred lassoSizeThree {
+    // To be meaningful, this needs to be run with atLeastTwoDistinctStates
+    all x, y : Int | {
+        Board.mappings[x][y] = Board.mappings'''[x][y]
+    }
+}
+
 run {
     // all x,y : Int | {
     //     (x = 0 or x = 1) and (y = 0 or y = 1) => some Board.mappings[x][y]
     //     else no Board.mappings[x][y]
     // } and always{GameRules}
     always{IntBounds3}
-    //Blinker
+    //Beacon
     atLeastTwoDistinctStates
-    lassoSizeTwo
+    // lassoSizeTwo
     always{GameRules}
 } for 4 Int
