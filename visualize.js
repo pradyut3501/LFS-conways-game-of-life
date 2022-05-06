@@ -16,14 +16,14 @@ for (let idx = 0; idx < numinst; idx++){
 function processInstances(inst) {
     let mappings = inst.field("mappings").tuples()
     coords = []
-    alert(String(mappings[1]).split(","))
+    //alert(String(mappings[1]).split(","))
     for (let idx = 0; idx < mappings.length; idx++){
         let curr_tuple = String(mappings[idx]).split(",")
         let x = curr_tuple[1]
         let y = curr_tuple[2]
         coords.push([x,y])
     }
-    alert(coords)
+    //alert(coords)
     return coords
 }
 
