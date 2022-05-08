@@ -4,24 +4,34 @@
 
 const allinst = instances.map(processInstances)
 const numinst = instances.length
-const bitwidth = 3 //TODO: Determine this dynamically
+//Calculate bitwidth based on number of Int instances
+let num_ints = instances[0].signature("Int").atoms().length
+const bitwidth = (Math.log(num_ints) / Math.LN2) - 1 //Change of base formula for computing log base 2
+//Subtract 1 because bitwidth is always one greater than the board size
 const max_int = 2 ** (bitwidth - 1)
 div.innerHTML = "" //Clear the div
+
 //set font size based on bit width and window horizontal size
 let left_sidebar_width = 181
 let right_sidebar_width = 350 + 30
 let center_width = window.innerWidth - left_sidebar_width - right_sidebar_width
-let display_width = Math.floor(center_width / 2)
-let fontsize = Math.floor((display_width * 0.6) / (max_int * 2)) + "px"
+let display_width = Math.floor(center_width / 2) - 10 //Subtract 10 for scrollbar
+let fontsize = Math.floor((display_width * 0.5) / (max_int * 2))
+//Font sizes that are too huge look silly, so limit font size to a max of 32px
+if (fontsize > 32) {
+    fontsize = 32
+}
+fontsize = fontsize + "px"
 
 for (let idx = 0; idx < numinst; idx++){
-    //create center-aligned <p> element
+    //Create "State X" tile
     let new_p = document.createElement("p")
     new_p.style.textAlign = "center"
     new_p.style.fontWeight = "bold"
     new_p.style.fontSize = "28px"
     new_p.innerHTML = "State" + idx + ":<br>"
     div.innerHTML += new_p.outerHTML
+    //Create the actual state board
     div.innerHTML += draw(allinst[idx])
     div.innerHTML += "<br>"
 }
