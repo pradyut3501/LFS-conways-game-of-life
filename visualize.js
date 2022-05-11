@@ -31,7 +31,7 @@ for (let idx = 0; idx < numinst; idx++){
     new_p.innerHTML = "State" + idx + ":<br>"
     div.innerHTML += new_p.outerHTML
     //Create the actual state board
-    div.innerHTML += drawCanvas(allinst[idx], idx)
+    div.innerHTML += draw(allinst[idx], idx)
     div.innerHTML += "<br>"
 }
 
