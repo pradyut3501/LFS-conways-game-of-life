@@ -6,7 +6,7 @@ const allinst = instances.map(processInstances)
 const numinst = instances.length
 //Calculate bitwidth based on number of Int instances
 let num_ints = instances[0].signature("Int").atoms().length
-const bitwidth = (Math.log(num_ints) / Math.LN2) - 1 //Change of base formula for computing log base 2
+const bitwidth = Math.floor(Math.log(num_ints) / Math.LN2) - 1 //Change of base formula for computing log base 2
 //Subtract 1 because bitwidth is always one greater than the board size
 const max_int = 2 ** (bitwidth - 1)
 div.innerHTML = "" //Clear the div
@@ -21,7 +21,6 @@ let fontsize = Math.floor((display_width * 0.5) / (max_int * 2))
 if (fontsize > 32) {
     fontsize = 32
 }
-fontsize = fontsize + "px"
 
 for (let idx = 0; idx < numinst; idx++){
     //Create "State X" tile
@@ -32,7 +31,7 @@ for (let idx = 0; idx < numinst; idx++){
     new_p.innerHTML = "State" + idx + ":<br>"
     div.innerHTML += new_p.outerHTML
     //Create the actual state board
-    div.innerHTML += draw(allinst[idx])
+    div.innerHTML += drawCanvas(allinst[idx], idx)
     div.innerHTML += "<br>"
 }
 
@@ -53,6 +52,30 @@ function processInstances(inst) {
     return coords
 }
 
+function drawCanvas(inst, inst_idx) {
+    //returns a canvas colored according to the current instance
+    //Unused, because it doesn't work right now
+    let canvas = document.createElement("canvas")
+    canvas.id = "canvas" + inst_idx
+    document.body.appendChild(canvas)
+    //canvas.width = display_width * 0.8
+    //canvas.height = display_width * 0.8
+    canvas = document.getElementById("canvas" + inst_idx)
+    let ctx = canvas.getContext("2d")
+    for(let x = -max_int; x < max_int; x++){
+        for(let y = -max_int; y < max_int; y++){
+            if(inst.find(coords => coords[0] == x && coords[1] == y)){
+                ctx.fillStyle = '#000000'
+                ctx.fillRect((x+max_int) * fontsize, (y+max_int) * fontsize, fontsize, fontsize)
+            } else {
+                ctx.fillStyle = '#FFFFFF'
+                ctx.fillRect((x+max_int) * fontsize, (y+max_int) * fontsize, fontsize, fontsize)
+            }
+        }
+    }
+    return canvas.outerHTML
+}
+
 function draw(inst) {
     //returns a div full of emojis representing the current instance
     let new_div = document.createElement("div")
@@ -66,7 +89,8 @@ function draw(inst) {
         }
         new_div.innerHTML += "<br>"
     }
-    new_div.style.fontSize = fontsize
+    new_div.style.fontFamily = "monospace"
+    new_div.style.fontSize = fontsize + "px"
     return new_div.outerHTML
 }
 
