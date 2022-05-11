@@ -8,7 +8,7 @@ const numinst = instances.length
 let num_ints = instances[0].signature("Int").atoms().length
 const bitwidth = Math.floor(Math.log(num_ints) / Math.LN2) - 1 //Change of base formula for computing log base 2
 //Subtract 1 because bitwidth is always one greater than the board size
-const max_int = 2 ** (bitwidth - 1)
+const max_int = 2 ** (bitwidth)
 div.innerHTML = "" //Clear the div
 
 //set font size based on bit width and window horizontal size
