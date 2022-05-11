@@ -5,7 +5,7 @@ option max_tracelength 5
 
 one sig Board {
     // If it exists, the cell is 'alive', otherwise dead.
-    var mappings : set Int -> Int,
+    var mappings : set Int -> Int
 }
 
 // cellAlive depicts an "alive" mapping at x,y on the Board
@@ -68,6 +68,11 @@ pred GameRules {
 // Predicate to ensure oscillation of 2 occurs
 pred lassoSizeTwo {
     Board.mappings = Board.mappings''
+}
+
+// Predicate to ensure oscillation of 3 occurs
+pred lassoSizeThree {
+    Board.mappings = Board.mappings'''
 }
 
 // Predicate to ensure the board doesn't remain the same 
@@ -219,7 +224,7 @@ test expect {
             always{GameRules}
             mappings = b1 -> -2 -> -2 + b1 -> -2 -> -1 + b1 -> -2 -> 0 + b1 -> -2 -> 1 + b1 -> -1 -> -2 + b1 -> -1 -> -1 + b1 -> -1 -> 0 + b1 -> -1 -> 1 + b1 -> 0 -> -2 + b1 -> 0 -> -1 + b1 -> 0 -> 0 + b1 -> 0 -> 1 + b1 -> 1 -> -2 + b1 -> 1 -> -1 + b1 -> 1 ->  0 + b1 -> 1 -> 1
         } 
-    } for 3 Int is unsat 
+    } for 3 Int is sat 
 
     diagonalTest: {
         one b1:Board | {
