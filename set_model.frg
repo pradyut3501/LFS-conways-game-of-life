@@ -80,6 +80,23 @@ pred atLeastTwoDistinctStates {
     not{Board.mappings = Board.mappings'}
 }
 
+// Predicate to ensure the board doesn't remain the same over 3 states
+pred atLeastThreeDistinctStates {
+    not{Board.mappings = Board.mappings'}
+    not{Board.mappings = Board.mappings''}
+    not{Board.mappings' = Board.mappings''}
+}
+
+// Predicate to ensure the board doesn't remain the same over 4 states
+pred atLeastFourDistinctStates {
+    not{Board.mappings = Board.mappings'}
+    not{Board.mappings = Board.mappings''}
+    not{Board.mappings = Board.mappings'''}
+    not{Board.mappings' = Board.mappings''}
+    not{Board.mappings' = Board.mappings'''}
+    not{Board.mappings'' = Board.mappings'''}
+}
+
 // Predicate to ensure the board remains the same
 pred StaystheSame {
     Board.mappings = Board.mappings'
