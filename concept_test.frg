@@ -3,31 +3,16 @@
 option problem_type temporal
 option max_tracelength 5
 
-/*
-abstract sig Boolean{}
-one sig True extends Boolean{}
-one sig False extends Boolean{}
-
-sig Cell{
-    alive : one Boolean
-}
-*/
 one sig Cell{}
 
 one sig Board {
-    var mappings : pfunc Int -> Int -> Cell //If it exists, the cell is 'alive', otherwise dead.
+    //If it exists, the cell is 'alive', otherwise dead.
+    var mappings : pfunc Int -> Int -> Cell 
 }
 
 fun neighbors[x : Int, y : Int]: one Int {
     #{a, b: Int | 
-    // not((a < 0) and (x > add[1, a])) and //subtraction overflow
-    // not((a > 0) and (x < add[-2, a])) and 
-    // not((b < 0) and (y > add[1, b])) and 
-    // not((b > 0) and (y < add[-2, b])) and 
-    // not((a > 0) and (x > subtract[3, a])) and // addition overflow
-    // not((a < 0) and (x < subtract[-4, a])) and
-    // not((b > 0) and (y > subtract[3, b])) and
-    // not((b < 0) and (y < subtract[-4, b])) and
+    
     (abs[subtract[x,a]] <= 1) and (abs[subtract[y,b]] <= 1) and (not{a = x and b = y}) and some Board.mappings[a][b]}
 
     // let neighbors_coord = (subtract[x,1]->add[y,1]) + (subtract[x,1]->y) + (subtract[x,1]->subtract[y,1]) + (x->add[y,1]) + (x->subtract[y,1]) + (add[x,1]->add[y,1]) + (add[x,1]->y) + (add[x,1]->subtract[y,1]) | {
