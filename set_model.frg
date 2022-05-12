@@ -5,7 +5,7 @@ option max_tracelength 5
 
 one sig Board {
     // If it exists, the cell is 'alive', otherwise dead.
-    var mappings : set Int -> Int,
+    var mappings : set Int -> Int
 }
 
 // cellAlive depicts an "alive" mapping at x,y on the Board
@@ -126,7 +126,30 @@ pred Beacon {
     }
 }
 
-//Tests
+// 11 states (Oscillates between states 9 and 10)
+// (change max_trace_length = 11)
+pred TTetromino {
+    all x,y : Int | {
+        {(x = 0 and y = 0) or (x = -1 and y = 0) or (x = 1 and y = 0) or (x = 0 and y =-1)} => cellAlive[x,y]
+        else cellDead[x,y]
+    }
+}
+
+// Period 15 Oscillator (needs at least 5 Int)
+// (change max_trace_length = 16)
+pred Pentadecathlon {
+    all x,y : Int | {
+        {(x = 0 and y = 0) or (x = -1 and y = 0) or (x = -2 and y = 0) or (x = -3 and y = 0) or
+        (x = -5 and y = 0) or (x = 2 and y = 0) or (x = -5 and y = 1) or (x = -4 and y = 1) or
+        (x = -3 and y = 1) or (x = -2 and y = 1) or (x = -1 and y = 1) or (x = 0 and y = 1) or
+        (x = 1 and y = 1) or (x = 2 and y = 1) or (x = -5 and y = -1) or (x = -4 and y = -1) or
+        (x = -3 and y = -1) or (x = -2 and y = -1) or (x = -1 and y = -1) or (x = 0 and y = -1) or
+        (x = 1 and y = -1) or (x = 2 and y = -1)} => cellAlive[x,y]
+        else cellDead[x,y]
+    }
+}
+
+// Tests
 
 test expect {
     vacuityTest: {
@@ -219,7 +242,7 @@ test expect {
             always{GameRules}
             mappings = b1 -> -2 -> -2 + b1 -> -2 -> -1 + b1 -> -2 -> 0 + b1 -> -2 -> 1 + b1 -> -1 -> -2 + b1 -> -1 -> -1 + b1 -> -1 -> 0 + b1 -> -1 -> 1 + b1 -> 0 -> -2 + b1 -> 0 -> -1 + b1 -> 0 -> 0 + b1 -> 0 -> 1 + b1 -> 1 -> -2 + b1 -> 1 -> -1 + b1 -> 1 ->  0 + b1 -> 1 -> 1
         } 
-    } for 3 Int is unsat 
+    } for 3 Int is sat 
 
     diagonalTest: {
         one b1:Board | {
@@ -228,7 +251,7 @@ test expect {
             mappings' = b1 -> -1 -> -1 + b1 -> 0 -> 0
             no mappings''
         } 
-    }for 4 Int is sat 
+    } for 4 Int is sat 
 
     dyingAndBeingBornTest: {
         one b1:Board | {
