@@ -1,5 +1,7 @@
 # LFS-FinalProject
 
+Demo Video: https://youtu.be/rcnRg1SbCAw 
+
 This model of Conway’s game of life uses a single Board sig, which has a variable field called mappings. The mappings variable keeps track of which cells are ‘alive’ using a set of 2 ints, which refer to the x and y coordinates of the cell. If a mapping exists, the cell in that position is considered alive. Otherwise, the cell is dead.
 
 The original game of life is designed to be played with an infinitely-sized board, allowing for turing-completeness and for very large creations. Our model can, of course, only handle finite-sized boards. This leads to the issue of integer overflow at the edges. As a result, we enforce that the edges of the board must be empty. Additionally, while we can simulate the game of life starting from a given state very well even with large bit widths, generating instances having a specific type of structure is very time-consuming in forge, and is therefore impractical with bit widths of more than 4, or with sequences more than 3 states long.
